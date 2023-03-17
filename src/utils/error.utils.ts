@@ -3,7 +3,7 @@
  * that can hold a specific status code and a message.
  */
 export class CustomError extends Error {
-  status: number;
+  public status: number;
 
    /**
    * Constructor for the CustomError class.
