@@ -8,8 +8,9 @@ export const errorHandler = (
   res: Response,
   next: NextFunction
 ) => {
-  logger.error(``)
+  logger.error(`Error middleware ${err}`)
   const status = err.status || 500;
   const message = err.message || 'Something went wrong';
   res.status(status).json({ error: message });
+  next(err)
 };

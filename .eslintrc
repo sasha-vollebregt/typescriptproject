@@ -17,9 +17,10 @@
   "env": {
     "node": true,
   },
+  "ignorePatterns": [ "dist/**"],
   "overrides": [
     {
-      "files": ["*.ts"],
+      "files": ["./src/**/*.ts"],
       "rules": {
         "no-console": "warn"
       }

@@ -10,11 +10,10 @@ const PORT = config.PORT;
 app.use(authMiddleware);
 
 app.get('/', (req: Request, res: Response) => {
-  console.log('Enter')
   res.send('Express + TypeScript Server');
 });
 
-app.use(errorHandler)
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   logger.info(`⚡️[server]: Server is running at http://localhost:${PORT}`);
