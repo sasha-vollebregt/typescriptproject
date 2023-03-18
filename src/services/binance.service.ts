@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { axiosMiddleware } from '../middleware/axios.middleware.js';
 import { BinancePingResponse, CandlestickData, BinanceTicker, BinanceSymbol } from '../interfaces/binance.interface.js';
 
