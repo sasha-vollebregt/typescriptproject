@@ -9,13 +9,9 @@ import { CustomError } from 'utils/error.utils.js';
  * @param {Response} res - The Express Response object.
  * @param {NextFunction} next - The Express NextFunction object.
  */
-export const errorHandler = (
-  err: CustomError,
-  req: Request,
-  res: Response,
-  next: NextFunction
+export const errorHandler = ( err: CustomError, req: Request, res: Response, next: NextFunction
 ) => {
-  logger.error(`Error middleware ${err}`)
+  logger.error(`Error middleware with the following error ${err}`)
   const status = err.status || 500;
   const message = err.message || 'Something went wrong';
   res.status(status).json({ error: message });

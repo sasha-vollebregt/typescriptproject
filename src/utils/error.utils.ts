@@ -3,7 +3,7 @@
  * that can hold a specific status code and a message.
  */
 export class CustomError extends Error {
-  public status: number;
+  private _status: number;
 
    /**
    * Constructor for the CustomError class.
@@ -12,20 +12,28 @@ export class CustomError extends Error {
    */
   constructor(message: string, status: number) {
     super(message);
-    this.status = status;
+    this._status = status;
     Object.setPrototypeOf(this, CustomError.prototype);
   }
 
   /**
-   * toJSON method returns a JSON object that represents the error.
-   * It includes a message property with the error message, and a statusCode property
-   * with the HTTP status code for the error.
-   * @returns A JSON object with message and statusCode properties.
+   * Getter for the status property.
+   * Returns the current value of the _status property.
    */
-  toJSON() {
-    return {
-      message: this.message,
-      statusCode: this.status,
-    };
+  get status(): number {
+    return this._status;
+  }
+
+  /**
+   * Setter for the status property.
+   * Sets the value of the _status property, after performing some validation checks.
+   * @param newNumber - The new value to set for the status property.
+   */
+  set status(newNumber: number) {
+    if (newNumber < 0) {
+      this._status = 500;
+    } else {
+      this._status = newNumber;
+    }
   }
 }
