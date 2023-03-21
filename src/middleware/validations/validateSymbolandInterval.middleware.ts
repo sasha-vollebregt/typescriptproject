@@ -1,14 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
-import { BinanceSymbol, BinanceInterval, CandlestickRequestBody } from '../interfaces/binance.interface.js';
+import { EBinanceSymbol, EBinanceInterval, ICandlestickInput } from '../../interfaces/binance.interface.js';
 
 const validateCandlestickRequest = (req: Request, res: Response, next: NextFunction) => {
-  const { symbol, interval }: CandlestickRequestBody = req.body;
+  const { symbol, interval }: ICandlestickInput = req.body;
 
-  if (!BinanceSymbol[symbol]) {
+  if (!EBinanceSymbol[symbol]) {
     return res.status(400).json({ message: `Invalid symbol: ${symbol}` });
   }
 
-  if (!BinanceInterval[interval]) {
+  if (!EBinanceInterval[interval]) {
     return res.status(400).json({ message: `Invalid interval: ${interval}` });
   }
 

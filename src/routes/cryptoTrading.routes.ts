@@ -1,8 +1,8 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import TradingController from '../controllers/cryptoTrading.controller.js';
-import validateCandlestickRequest from '../middleware/validateSymbolAndInterval.middleware.js'; 
+import validateCandlestickRequest from '../middleware/validations/validateSymbolAndInterval.middleware.js'; 
 import { logger } from '../utils/logger.utils.js';
-
+import { IBinancePingResponse, ICandlestickDataResponse, IBinanceTickerResponse } from '../interfaces/binance.interface.js';
 const router = Router();
 const tradingController = new TradingController();
 
@@ -10,9 +10,8 @@ const tradingController = new TradingController();
 router.get('/ping', async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Call the getTradingData function of the TradingController to get trading data
-    const tradingData = await tradingController.pingBinance();
-    // Send the trading data as the response
-    res.json(tradingData);
+    const tradingObject: IBinancePingResponse = await tradingController.pingBinance();
+    res.json(tradingObject);
   } catch (err) {
     // If an error occurred, send an error response
     logger.error(`Crypto routers error at ping ${err}`);
@@ -26,9 +25,9 @@ router.post('/candlestick', validateCandlestickRequest, async (req: Request, res
     // Call the getTradingData function of the TradingController to get trading data
     const { symbol, interval } = req.body; // extract symbol and interval from request body
     logger.info(`The router is getting candlestick data: ${symbol} and ${interval}`)
-    const tradingData = await tradingController.candleStickData(symbol, interval);
+    const candlestickData: ICandlestickDataResponse[] = await tradingController.candleStickData(symbol, interval);
     // Send the trading data as the response
-    res.json(tradingData);
+    res.json(candlestickData);
   } catch (err) {
     // If an error occurred, send an error response
     logger.error(`Crypto routers error at candlestick ${err}`);
@@ -37,15 +36,17 @@ router.post('/candlestick', validateCandlestickRequest, async (req: Request, res
 });
 
 // GET /trading-data route
-router.get('/ticker-24h', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/ticker-24h', async (req: Request, res: Response, next: NextFunction) => {
   try {
     // Call the getTradingData function of the TradingController to get trading data
-    const tradingData = await tradingController.Ticker24hData();
+    const { symbol } = req.body; 
+    logger.info(`Router api received the following paramters: symbol ${symbol}`)
+    const tradingData: IBinanceTickerResponse[] = await tradingController.Ticker24hData(symbol);
     // Send the trading data as the response
     res.json(tradingData);
   } catch (err) {
     // If an error occurred, send an error response
-    logger.error(`Crypto routers error at ping ${err}`);
+    logger.error(`Crypto routers error at ticker-24h ${err}`);
     next(err)
   }
 });

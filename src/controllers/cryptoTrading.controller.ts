@@ -1,18 +1,21 @@
-
 import BinanceService from '../services/binance.service.js';
-import { BinancePingResponse, CandlestickData, BinanceTicker, BinanceSymbol } from '../interfaces/binance.interface.js';
+import { IBinancePingResponse, ICandlestickDataResponse, IBinanceTickerResponse, EBinanceSymbol } from '../interfaces/binance.interface.js';
 import { logger } from '../utils/logger.utils.js';
 
 class TradingController {
+  private _binanceService: BinanceService;
+
+  constructor() {
+    this._binanceService = new BinanceService;
+  }
   /**
    * Calls the Binance API ping endpoint to test connectivity
    * @returns a Promise that resolves to a BinancePingResponse object
    */
-    public async pingBinance(): Promise<BinancePingResponse> {
+    public async pingBinance(): Promise<IBinancePingResponse> {
       try {
-      logger.info('Ping Binance API');
-      const binanceService = new BinanceService();
-      return await binanceService.call();
+      logger.info('The cryptoTrading controller is about to Ping Binance API');
+      return await this._binanceService.call();
     } catch (error) {
       logger.error(`Error pinging Binance API: ${error}`);
       throw new Error()
@@ -25,11 +28,10 @@ class TradingController {
    * @param interval the interval for the candlestick data (e.g. '1h', '4h', '1d')
    * @returns a Promise that resolves to an array of CandlestickData objects
    */
-  public async candleStickData(symbol: BinanceSymbol, interval: string): Promise<CandlestickData[]> {
+  public async candleStickData(symbol: EBinanceSymbol, interval: string): Promise<ICandlestickDataResponse[]> {
     try {
-      logger.info(`Getting candlestick data for ${symbol} and interval ${interval}`);
-      const binanceService = new BinanceService();
-      return await binanceService.getCandlestickData(symbol, interval);
+      logger.info(`The cryptoTrading controller is getting candlestick data for ${symbol} and interval ${interval}`);
+      return await this._binanceService.getCandlestickData(symbol, interval);
     } catch (error) {
       logger.error(`Error pinging Binance API: ${error}`);
       throw new Error();
@@ -41,11 +43,10 @@ class TradingController {
    * @returns a Promise that resolves to a BinanceTickerRepsonse object
    */
 
-  public async Ticker24hData(): Promise<BinanceTicker[]> {
+  public async Ticker24hData(symbol: EBinanceSymbol): Promise<IBinanceTickerResponse[]> {
     try {
-      logger.info(`Getting Ticker24hData data for`);
-      const binanceService = new BinanceService();
-      return await binanceService.getTicker24hData('ETHBTC');
+      logger.info(`The cryptoTrading controller getting Ticker24hData data with symbol ${symbol}`);
+      return await this._binanceService.getTicker24hData(symbol);
     } catch (error) {
       logger.error(`Error pinging Binance API: ${error}`);
       throw new Error();

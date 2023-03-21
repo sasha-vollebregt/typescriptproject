@@ -1,25 +1,47 @@
-export interface BinancePingResponse {
-  data: string;
+export interface IBinancePingResponse {
+  data: object;
 }
 
-export enum BinanceSymbol {
+export enum EBinanceSymbol {
   BTCUSDT = 'BTCUSDT',
   ETHUSDT = 'ETHUSDT',
   // add more symbols here as needed
 }
 
-export enum BinanceInterval {
+export enum EBinanceInterval {
   '1m' = '1m',
   '5m' = '5m'
 }
 
-export interface CandlestickRequestBody {
-  symbol: keyof typeof BinanceSymbol;
-  interval: keyof typeof BinanceInterval;
+export enum ETradeType {
+  price = 'price',
+  bid = 'bid',
+  ask = 'ask',
+  volume = 'volume',
+  all = 'all'
 }
 
-export interface CandlestickData {
-  openTime: number;
+export interface ITradingInput {
+  symbol?:  keyof typeof EBinanceSymbol;
+  symbols?: keyof typeof  EBinanceSymbol[]; 
+  interval?: keyof typeof EBinanceInterval;
+  startTime?: number;
+  endTime?: number;
+  limit?: number;
+  type?: keyof typeof ETradeType;
+  fromId?: number;
+}
+
+export interface ITradingBaseInput extends ITradingInput {
+  symbol:  keyof typeof EBinanceSymbol;
+}
+
+export interface ICandlestickInput extends ITradingInput {
+  symbol:  keyof typeof EBinanceSymbol;
+  interval: keyof typeof EBinanceInterval;
+}
+
+export interface ICandlestickDataResponse {
   open: string;
   high: string;
   low: string;
@@ -33,7 +55,7 @@ export interface CandlestickData {
   ignored: string;
 }
 
-export interface BinanceTicker {
+export interface IBinanceTickerResponse {
   symbol: string;
   priceChange: string;
   priceChangePercent: string;
@@ -50,7 +72,6 @@ export interface BinanceTicker {
   lowPrice: string;
   volume: string;
   quoteVolume: string;
-  openTime: number;
   closeTime: number;
   firstId: number;
   lastId: number;
